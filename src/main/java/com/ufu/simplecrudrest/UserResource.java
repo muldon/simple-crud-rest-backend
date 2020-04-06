@@ -27,26 +27,36 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class UserResource 
 {
-    private static Map<Integer, User> DB = new HashMap<>(); 
+    private static Map<Integer, User> DB = new HashMap<>();
+    private static Integer id; 
      
     static
     {
+    	id=0;
     	User user1 = new User();
-        user1.setId(1);
+        user1.setId(id++);
         user1.setFirstName("John");
         user1.setLastName("Wick");
         user1.setUri("/user-management/1");
         user1.setAddress("tomas falbo 1840");
  
         User user2 = new User();
-        user2.setId(2);
+        user2.setId(id++);
         user2.setFirstName("Harry");
         user2.setLastName("Potter");
         user2.setUri("/user-management/2");
         user1.setAddress("saturnino pedro 300");
+        
+        User user3 = new User();
+        user3.setId(id++);
+        user3.setFirstName("Margarett");
+        user3.setLastName("Fernandes");
+        user3.setUri("/user-management/3");
+        user1.setAddress("santos dummond 221");
          
         DB.put(user1.getId(), user1);
         DB.put(user2.getId(), user2);
+        DB.put(user3.getId(), user3);
     }
     
     @GET
@@ -65,7 +75,9 @@ public class UserResource
         if(user.getFirstName() == null || user.getLastName() == null) {
             return Response.status(400).entity("Please provide all mandatory inputs").build();
         }
-        user.setId(DB.values().size()+1);
+        
+        //user.setId(DB.values().size()+1);
+        user.setId(id++);
         user.setUri("/user-management/"+user.getId());
         DB.put(user.getId(), user);
         return Response.status(201).contentLocation(new URI(user.getUri())).build();
